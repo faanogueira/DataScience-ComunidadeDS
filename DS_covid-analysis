@@ -1,1 +1,30 @@
 # Colete dados de fontes confiáveis e analise tendências, taxas de infecção, mortalidade e outras métricas relacionadas à pandemia
+
+import pandas as pd
+
+# URL do repositório com os dados da COVID-19 no Brasil
+data_url = 'https://raw.githubusercontent.com/wcota/covid19br/master/cases-brazil-cities-time.csv.gz'
+
+# Carregar os dados em um DataFrame
+df = pd.read_csv(data_url, compression='gzip')
+
+# Exibir as primeiras linhas do DataFrame
+print(df.head())
+
+# Análise de tendências - Exemplo: Número de casos ao longo do tempo
+trend_analysis = df.groupby('date')['newCases'].sum()
+
+# Taxas de infecção - Exemplo: Casos por 100k habitantes
+infection_rate = df['totalCases_per_100k_inhabitants'].max()
+
+# Mortalidade - Exemplo: Taxa de mortalidade
+mortality_rate = (df['deaths'].sum() / df['totalCases'].sum()) * 100
+
+# Outras métricas - Exemplo: Taxa de crescimento
+growth_rate = df['newCases'].pct_change().mean() * 100
+
+# Exibir as análises
+print(f'Tendência de novos casos: {trend_analysis}')
+print(f'Taxa de infecção máxima: {infection_rate} casos por 100k habitantes')
+print(f'Taxa de mortalidade: {mortality_rate}%')
+print(f'Taxa média de crescimento de novos casos: {growth_rate}%')
